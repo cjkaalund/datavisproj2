@@ -28,8 +28,8 @@
   
 // Chart size and margins
 // The margins allow space for surrounding elements such as the legend
-	var margin = {top: 100, right: 200, bottom: 400, left:60}
-	var chartSize = {width: 600, height: 200}
+	var margin = {top: 100, right: 200, bottom: 200, left:200}
+	var chartSize = {width: 400, height: 300}
 	
 // Create chart svg
 	var svg = dimple.newSvg("#chartContainer",
@@ -75,14 +75,14 @@
       var myChart = new dimple.chart(svg, data);
       myChart.setBounds(margin.left, margin.top, chartSize.width, chartSize.height)
 
-      var x = myChart.addCategoryAxis("x", "carrier_name");
-		x.title = "Airline";
-		x.fontSize = "12px";
+      var y = myChart.addCategoryAxis("y", "carrier_name");
+		y.title = "Airline";
+		y.fontSize = "12px";
 
-      var y = myChart.addMeasureAxis("y", "avg_delay");
-      y.title = "Average arrival delay (minutes)";
-      y.fontSize = "12px";
-		y.overrideMin = 0;
+      var x = myChart.addMeasureAxis("x", "avg_delay");
+      x.title = "Average arrival delay (minutes)";
+      x.fontSize = "12px";
+		x.overrideMin = 0;
 
       var mySeries = myChart.addSeries("reason", dimple.plot.bar); // the legend will be the delay reason
 
@@ -98,7 +98,7 @@
 		debugger;
 // Legend title
 		svg.selectAll("title_text")
-			.data(["Click legend to select one reason","SHIFT-click to select more than one"])
+			.data(["Click legend to select one carrier","SHIFT-click to select more than one"])
 			.enter()
 			.append("text")
 				.attr("x", margin.left + chartSize.width + 10)
@@ -118,7 +118,7 @@
 			.enter()
 			.append("text")
 				.attr("x", 0)
-				.attr("y", function (d, i) { return margin.top + chartSize.height + i * 16 + 200; })
+				.attr("y", function (d, i) { return margin.top + chartSize.height + i * 16 + 75; })
 				.style("font-family", "sans-serif")
 				.style("font-size", "12px")
 				.style("fill","blue")

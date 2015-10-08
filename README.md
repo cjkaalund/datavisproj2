@@ -83,8 +83,7 @@ Q5. Is there something you don’t understand in the graphic?
 
 *The carrier axis is off with the names not lining up with the graph and the names are hard to read.*
 
-This reviewer was unsure of what the height of the bars represented, although the y-axis is labelled in minutes. A tricky problem concerns his answer to question 5. Rather than using the full name of an airline, I could use a two letter code (e.g. DL = Delta Air Lines). However some codes are weird (e.g. MQ = Envoy Air) and I find that they are not memorable, so my personal preference is to use the full airline name. Tilting the category labels is another option, however the labels then do not line up so clearly with the bars, so I left this unchanged.
-
+This reviewer was unsure of what the height of the bars represented, although the y-axis is labelled in minutes. To address the problem of the readability of the airline axis, I changed from a vertical to a horizontal stacked bar chart.
 ##Resources
   * http://stat-computing.org/dataexpo/2009/the-data.html
   * http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.asp
