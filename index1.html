@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+</head>
+
+<select id="menu"></select>
+
+<div id="chartContainer">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+  <script type="text/javascript">
+  
+// Chart size and margins
+// The margins allow space for surrounding elements such as the legend
+	var margin = {top: 100, right: 150, bottom: 200, left:60}
+	var chartSize = {width: 600, height: 250}
+
+// Create chart svg
+	var svg = dimple.newSvg("#chartContainer",
+		margin.left + chartSize.width + margin.right,
+		margin.top + chartSize.height + margin.bottom
+	);
+	
+// Chart heading
+	svg.append("text")
+		.attr("x", margin.left + chartSize.width / 2)             
+		.attr("y", margin.top / 2)
+		.style("text-anchor", "middle")
+		.style("font-family", "sans-serif")
+		.style("font-size", "25px")
+		.attr("id", "heading") // give it an id for selection later on
+		.text("U.S. Airline Flight Delay for 2014, All Airports");
+
+// Load the data
+	d3.csv("2014_airline_delay_reshaped.csv", function (data) {
+
+// The code below aggregates the delay so as to calculate the maximum delay
+// for a give airport and carrier. This enables the y-scale to be fixed
+// (as opposed to rescaled) for easier comparison of different airports       
+		function agg_data(leaves) {
+			 var total = d3.sum(leaves, function(d) {
+				  return d["avg_delay"];
+			 });
+			 return {
+				"total" : total
+			 };
+		}
+		
+		var nested = d3.nest()
+			.key(function(d) { return d["airport_name"]; })
+			.key(function(d) { return d["carrier_name"]; })
+			.rollup(agg_data)
+			.entries(data);
+
+		var yscalemax = 0; // y-scale upper limit = max value of 'nested'
+		
+		for (i = 0; i < nested.length; i++) {
+			for (j = 0; j < nested[i].values.length; j++) {
+				if (nested[i].values[j].values.total > yscalemax) {
+					yscalemax = nested[i].values[j].values.total;
+				};
+			};
+		};
+					 
+// Draw a stacked bar chart with legend using dimple
+      var myChart = new dimple.chart(svg, data);
+      myChart.setBounds(margin.left, margin.top, chartSize.width, chartSize.height)
+      var x = myChart.addCategoryAxis("x", "carrier_name");
+		x.title = "Carrier";
+		x.fontSize = "12px";
+      var y = myChart.addMeasureAxis("y", "avg_delay");
+      y.title = "Average delay per flight (minutes)";
+      y.fontSize = "12px";
+		y.overrideMin = 0;
+      var mySeries = myChart.addSeries("reason", dimple.plot.bar);
+      var delay_list = dimple.getUniqueValues(data, "reason").sort();
+		mySeries.addOrderRule(delay_list);
+      var myLegend = myChart.addLegend(margin.left + chartSize.width,
+      	margin.right, margin.right, chartSize.height, "Right");
+      myLegend.fontSize = "12px";
+		myChart.data = dimple.filterData(data, "airport_name", "All airports"); // display data for all airports
+      myChart.draw();
+
+//	Drop-down menu for selecting airport
+      var airport_list = dimple.getUniqueValues(data, "airport_name").sort(); // menu items
+      airport_list.unshift("Select airport"); // menu title
+		var menu = d3.select("#menu")
+		
+		menu.selectAll("option")
+			.data(airport_list)
+			.enter()
+			.append("option")
+			.text(function(d) {
+				 return d;
+			});
+
+		menu.on("change", change);
+
+		function change() {
+			if (airport_list[this.selectedIndex] != "Select airport") { // do not update if select menu title
+				update(airport_list[this.selectedIndex]);
+			};
+		};
+
+// Update stacked bar chart
+		function update(media_val) {
+			myChart.data = dimple.filterData(data, "airport_name", media_val); // only display data for selected airport
+
+			d3.select("#heading").remove() // clear old chart heading
+
+			svg.append("text") // update chart heading
+				.attr("x", margin.left + chartSize.width / 2)             
+				.attr("y", margin.top / 3)
+				.style("text-anchor", "middle")
+				.style("font-family", "sans-serif")
+				.style("font-size", "20px") // reduce size a little due to long airport names
+				.attr("id", "heading")
+				.text(media_val); // the airport name can be quite long, so use media_val only as new heading
+			
+			y.overrideMax = yscalemax; // prevent y-axis rescaling to allow comparison of airports
+			myChart.draw(100); // re-draw chart with 100 ms transition time
+		};
+
+    });
+		
+  </script>
+</div>
+</html>
