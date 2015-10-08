@@ -16,9 +16,9 @@ The legend was made interactive so that delay reasons can be selected or deselec
 
 
 ##Main versions:
-* original_index.html - (Vertbar9.html) - uploaded and presented to first reviewer, changed from fixed y-axis scale to rescaled, made legend interactive
-* index1.html - (Vertbar8) - an older version
-* final_index.html - (Vertbar10.html) final version, after receiving feedback from the reviwers. Changed x-axis title from 'carrier' to 'airline', added explanation of delay reasons at the bottom of the chart, limited the number of choices of the airport to the top 20 by volume
+* original_index.html - (Vertbar9.html) - uploaded and presented to all reviewers, changed from fixed y-axis scale to rescaled, made legend interactive
+* index1.html - (Vertbar8) - an older version. This version incorporates many of the changes that I made to the scatterplot in my original submission after receiving reviewer feedback, e.g. labelling of legend and axes
+* final_index.html - (Vertbar10.html) final version, after receiving feedback from the reviewers. Changed x-axis title from 'carrier' to 'airline', added explanation of delay reasons at the bottom of the chart, limited the number of choices of the airport to the top 20 by volume with the top reason being "All airports"
 
 #Feedback
 ##First reviewer - Sara
